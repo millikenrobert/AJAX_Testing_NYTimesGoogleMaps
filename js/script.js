@@ -22,20 +22,37 @@ function loadData() {
     var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
     url += '?' + $.param({
         'api-key': "62cb20aad25a467ea68f5dcbac63bd81",
-        'q': "melbourne"
+        'q': cityStr
     });
     $.ajax({
         url: url,
         method: 'GET',
     }).done(function(result) {
-        console.log(result);
+
     }).fail(function(err) {
         throw err;
     });
 
-    $.getJSON(URL, function(data) {
-        console.log(url);
-    });
+
+    $.getJSON(url, function(data) {
+        console.log(data.response.docs);
+        myArticles = data.response.docs;
+
+        for (var i = 0; i < myArticles.length; i++){
+            var singleArticle = myArticles[i];
+            console.log(singleArticle.snippet);
+
+            $nytElem.append('<li class="article">'+
+                '<a href="'+singleArticle.web_url+'">'+singleArticle.headline.main+'</a>'+
+                '<p>' + singleArticle.snippet + '</p>'+
+            '</li>');
+
+        }
+    })
+
+
+
+
 
 
     return false;
